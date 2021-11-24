@@ -1,7 +1,29 @@
 package com.example.myapplication;
 
+
 public class Location {
+    public int getID() {
+        return id;
+    }
+
+    public void setID(int ID) {
+        this.id = ID;
+    }
+
+    public int id =0;
     public double latitude;
+    public double longitude;
+    public double speed;
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public String identifier;
 
     public double getLatitude() {
         return latitude;
@@ -27,12 +49,13 @@ public class Location {
         this.speed = speed;
     }
 
-    public double longitude;
-    public double speed;
-    public Location(double latitude, double longitude, double speed) {
+
+    public Location(double latitude, double longitude, double speed, String identifier) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.speed = speed;
+        this.identifier = identifier;
+        this.id = id++;
 
     }
     Location(){}

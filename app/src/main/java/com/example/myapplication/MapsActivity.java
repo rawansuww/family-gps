@@ -22,11 +22,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
-    Person[] persons;
+  //  Person[] persons;
 
+    Location[] locs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,39 +47,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double latitude = 75.85;
         double longitude = 76.899;
         double speed = 240;
-        Location x = new Location(latitude, longitude, speed); //subject to change as for RDB as key identifier is the PERSON name
-        Person personX = new Person("Dina AlAshakr", 25, x);
-        personX.setLoc(x);
-        myRef.child("Dina's iPhone").setValue(personX);
+        Location x = new Location(latitude, longitude, speed, "Mena Huawei"); //subject to change as for RDB as key identifier is the PERSON name
+        //Person personX = new Person("Dina AlAshakr", 25, x);
+       // personX.setLoc(x);
+        myRef.child(String.valueOf(x.getID())).setValue(x);
+
+        ArrayList<Location> countryList = new ArrayList<Location>();
 
         // Read from the database ---------------------------
 
-        persons = new Person[2];
+        locs = new Location[2];
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                int i=0;
                for (DataSnapshot ds: dataSnapshot.getChildren())
                {
-                   persons[i++] = ds.getValue(Person.class);
+                   locs[i++] = ds.getValue(Location.class);
+
                    //Log.d("halo", String.valueOf(persons[i++].getName()));
                    /*
-
 */
                }
 
 
-               for (int j=0; j<persons.length; j++){
-                   Log.d("halo", String.valueOf(persons[j]));
-                   /*mMap.addMarker(new MarkerOptions().position(new LatLng(
-                           persons[j].getLoc().getLatitude(), persons[j].getLoc().getLongitude()))).setTitle(
-                           persons[j].getName()+
-                                   ": \nLongi="+persons[j].getLoc().getLongitude()+
-                                   "\nLatitude="+persons[j].getLoc().getLatitude()+
-                                   "\n Speed:"+ persons[j].getLoc());
 
-                   mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(persons[j].getLoc().getLatitude(), persons[j].getLoc().getLongitude())));
-              */ }
+                Log.d("halo", String.valueOf(locs[0].getIdentifier()));
+                mMap.addMarker(new MarkerOptions().position(new LatLng(
+                        locs[0].getLatitude(), locs[0].getLongitude()))).setTitle(
+                        locs[0].getIdentifier()+
+                                ": \nLongi="+locs[0].getLongitude()+
+                                "\nLatitude="+locs[0].getLatitude()+
+                                "\n Speed:"+ locs[0].getSpeed());
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(locs[0].getLatitude(), locs[0].getLongitude())));
+
+
+              //  WANTED TO LOOP AND GET ALL THE OBJECTS TO DISPLAY ON MAP.... keep getting NPE!!!!!!!!!
+                //  for (int j=0; j<locs.length; j++){
+
+                   //Log.d("halo", locs[j].getIdentifier());
+                   /*
+              */ //}
 
             }
 
